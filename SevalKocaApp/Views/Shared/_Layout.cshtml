@@ -1,0 +1,133 @@
+﻿@using Microsoft.AspNetCore.Http
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] | Seval Koca</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="top-bar">
+        <span>2500₺ ve üzeri alışverişlerinizde kargo bedava ♦ Üye Ol ve İlk Siparişine Özel %10 İndirim Kazan</span>
+    </div>
+
+  <header class="navbar">
+        <div class="nav-left dropdown">
+            <a href="#" class="dropbtn">Tüm Ürünler <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i></a>
+            <div class="dropdown-content">
+                <a href="/Home/Kategori">Üst Giyim</a>
+                <a href="/Home/Kategori">Alt Giyim</a>
+                <a href="/Home/Kategori">Aksesuar</a>
+            </div>
+        </div>
+        <div class="logo">
+            <a href="/">SEVAL KOCA</a>
+        </div>
+        <div class="nav-right">
+            @if (Context.Session.GetString("GirisYapildi") == "Evet")
+{
+                    <a asp-controller="Home" asp-action="UrunYonetimi" style="margin-right: 15px; font-weight: bold; color: #000; text-decoration: none;">
+                        <i class="fa-solid fa-user-gear"></i> Panel
+                    </a>
+                    <a asp-controller="Home" asp-action="Logout" style="color: #dc3545; font-weight: bold; text-decoration: none;">
+                        <i class="fa-solid fa-right-from-bracket"></i> Çıkış
+                    </a>
+                }
+                else
+                {
+                    <a asp-controller="Home" asp-action="Login" style="font-weight: 500; color: #333; text-decoration: none;">
+                        <i class="fa-solid fa-user"></i> Giriş Yap
+                    </a>
+                }
+            <a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+                @{
+                    // Hafızadaki metni al, eğer boş değilse yıldızlardan böl ve kaç parça olduğuna bak
+                    string anlikSepet = Context.Session.GetString("Sepetim") ?? "";
+                    int urunSayisi = string.IsNullOrEmpty(anlikSepet) ? 0 : anlikSepet.Split('*', StringSplitOptions.RemoveEmptyEntries).Length;
+                }
+                <a href="javascript:void(0);" onclick="sepetiAc()" style="cursor: pointer; text-decoration: none;">
+                    <i class="fa-solid fa-bag-shopping"></i> <span class="cart-count">@urunSayisi</span>
+                </a>
+        </div>
+    </header>
+
+    <main>
+        @RenderBody()
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-bottom">
+            <span>Şartlar ve Koşullar | Gizlilik Politikası | Erişilebilirlik</span>
+            <span>© 2025 Tüm Hakları Saklıdır. Created by Yüksek Yazılım</span>
+        </div>
+    </footer>
+
+    <script src="~/js/app.js"></script>
+
+    <!-- sepet ekleme -->
+   <div id="sepetPaneli" style="position: fixed; top: 0; right: -400px; width: 350px; height: 100vh; background: #fff; box-shadow: -5px 0 25px rgba(0,0,0,0.05); padding: 30px 20px; transition: right 0.4s ease; z-index: 9999; display: flex; flex-direction: column; font-family: 'Jost', sans-serif; box-sizing: border-box;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eaeaea; padding-bottom: 15px; margin-bottom: 20px;">
+        <h2 style="font-family: 'Cinzel', serif; margin: 0; font-size: 1.4rem; letter-spacing: 1px; color: #000;">SEPETİM</h2>
+        <button onclick="document.getElementById('sepetPaneli').style.right='-400px'" style="background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #999;">&times;</button>
+    </div>
+
+    <div style="flex-grow: 1; overflow-y: auto;">
+        @{
+            string sepetMetni = Context.Session.GetString("Sepetim") ?? "";
+            string[] urunler = sepetMetni.Split('*', StringSplitOptions.RemoveEmptyEntries);
+            decimal toplamFiyat = 0;
+        }
+
+        @if(urunler.Length == 0)
+        {
+            <p style="text-align: center; color: #888; margin-top: 50px;">Sepetiniz şu an boş.</p>
+        }
+        else
+        {
+            for(int i = 0; i < urunler.Length; i++)
+            {
+                var detay = urunler[i].Split('|');
+                toplamFiyat += Convert.ToDecimal(detay[1]);
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #f9f9f9;">
+                    <div>
+                        <h4 style="margin: 0; font-weight: 500; font-size: 1.1rem; color: #000;">@detay[0]</h4>
+                        <p style="margin: 3px 0; color: #777; font-size: 0.9rem;">Beden: @detay[3]</p>
+                        <p style="margin: 5px 0 0; font-weight: 500; color: #000;">₺@detay[1]</p>
+                    </div>
+                    
+                    <a asp-controller="Home" asp-action="SepettenSil" asp-route-id="@i" style="color: #dc3545; font-size: 1.2rem; text-decoration: none; padding: 5px;" title="Sepetten Çıkar">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </a>
+                </div>
+            }
+        }
+    </div>
+
+    <div style="border-top: 1px solid #eaeaea; padding-top: 20px; margin-top: auto;">
+        <div style="display: flex; justify-content: space-between; font-weight: 500; font-size: 1.2rem; margin-bottom: 20px; color: #000;">
+            <span>TOPLAM</span>
+            <span>₺@toplamFiyat</span>
+        </div>
+
+        <button onmouseover="this.style.background='#d4af37'" onmouseout="this.style.background='#000'" style="width: 100%; padding: 14px; background: #000; color: #fff; border: none; cursor: pointer; font-weight: 500; letter-spacing: 1px; transition: 0.3s; margin-bottom: 10px;">
+            SEPETİ ONAYLA
+        </button>
+
+        <button onclick="document.getElementById('sepetPaneli').style.right='-400px'" style="width: 100%; padding: 14px; background: #fff; color: #000; border: 1px solid #000; cursor: pointer; font-weight: 500; letter-spacing: 1px; transition: 0.3s;">
+            ALIŞVERİŞE DÖN
+        </button>
+    </div>
+</div>
+
+<script>
+    function sepetiAc() { document.getElementById("sepetPaneli").style.right = "0"; }
+</script>
+</body>
+</html>

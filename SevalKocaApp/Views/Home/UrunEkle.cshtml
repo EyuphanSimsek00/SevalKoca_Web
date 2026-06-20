@@ -1,0 +1,33 @@
+@model SevalKocaApp.Models.Urun
+@{
+    ViewData["Title"] = "Yeni Ürün Ekle - Yönetim";
+}
+
+<div class="admin-container" style="max-width: 600px; margin: 50px auto; padding: 30px; border: 1px solid #eee; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+    
+    <h2 style="font-family: 'Cinzel', serif; text-align: center; margin-bottom: 30px; letter-spacing: 1px;">YENİ ÜRÜN EKLE</h2>
+
+    <form asp-action="UrunEkle" method="post" style="display: flex; flex-direction: column; gap: 20px;">
+        
+        <div class="form-group">
+            <label style="display: block; margin-bottom: 8px; font-weight: 500;">Ürün Adı</label>
+            <input asp-for="UrunAdi" type="text" placeholder="Örn: Siyah Kaşe Kaban" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;" />
+        </div>
+
+        <div class="form-group">
+            <label style="display: block; margin-bottom: 8px; font-weight: 500;">Fiyat (₺)</label>
+            <input asp-for="Fiyat" type="number" step="0.01" placeholder="Örn: 3499.90" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;" />
+        </div>
+
+        <div class="form-group">
+            <label style="display: block; margin-bottom: 8px; font-weight: 500;">Görsel Dosya Yolu</label>
+            <input asp-for="GorselURL" type="text" placeholder="Örn: assets/takim.jpg" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;" />
+            <small style="color: #777; display: block; margin-top: 5px;">Dosyanın wwwroot/assets klasöründe olduğundan emin olun.</small>
+        </div>
+
+        <button type="submit" style="width: 100%; padding: 15px; background-color: #000; color: #fff; border: none; border-radius: 4px; font-size: 1.1rem; cursor: pointer; transition: background 0.3s; font-weight: bold; letter-spacing: 1px;">
+            ÜRÜNÜ SİSTEME KAYDET
+        </button>
+
+    </form>
+</div>

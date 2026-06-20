@@ -1,0 +1,59 @@
+﻿@model List<SevalKocaApp.Models.Urun>
+@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<section class="hero-section">
+    <div class="hero-content">
+        <a href="~/Home/Kategori" class="goz-at-link">Göz At</a>
+    </div>
+</section>
+
+<section class="categories-section">
+    <h2 class="section-title"><u>Kategoriler</u></h2>
+    <div class="category-grid">
+        <div class="category-card">
+            <img src="~/assets/ceket.jpg" alt="Üst Giyim">
+            <span class="category-label">Üst Giyim</span>
+        </div>
+        <div class="category-card">
+            <img src="~/assets/Kahverengi-Tayt.jpg" alt="Alt Giyim">
+            <span class="category-label">Alt Giyim</span>
+        </div>
+        <div class="category-card">
+            <img src="~/assets/aksesuar.jpg" alt="Aksesuar">
+            <span class="category-label">Aksesuar</span>
+        </div>
+    </div>
+</section>
+
+<section class="new-arrivals-section">
+    <div class="new-arrivals-header">
+        <h2>EN YENİLER</h2>
+    </div>
+
+    <div class="products-grid">
+            
+        @foreach (var urun in Model)
+        {
+            <a asp-controller="Home" asp-action="UrunDetay" asp-route-id="@urun.UrunID" class="product-card">
+                <img src="~/@urun.GorselURL" alt="@urun.UrunAdi">
+                <h3>@urun.UrunAdi</h3>
+                <p class="price">₺@urun.Fiyat</p>
+            </a>
+        }
+
+    </div>
+</section>
+
+<section class="newsletter-section">
+    <h2>Üye Ol VE İlk Siparişine Özel %10 İndirim Kazan!</h2>
+    <div class="newsletter-form">
+        <input type="email" placeholder="email">
+        <div class="checkbox-area">
+            <input type="checkbox" id="kampanya">
+            <label for="kampanya">Kampanya ve duyurulardan haberdar olmak istiyorum.</label>
+        </div>
+        <button class="btn-gray">Üye Ol</button>
+    </div>
+</section>
