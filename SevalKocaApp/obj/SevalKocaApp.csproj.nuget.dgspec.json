@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Eyüphan Şimşek\\Desktop\\SevalKoca_Web\\sevalkocaApp\\SevalKocaApp.csproj": {}
+    "C:\\Users\\Eyüphan Şimşek\\Desktop\\SevalKoca_Web\\SevalKocaApp\\SevalKocaApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Eyüphan Şimşek\\Desktop\\SevalKoca_Web\\sevalkocaApp\\SevalKocaApp.csproj": {
+    "C:\\Users\\Eyüphan Şimşek\\Desktop\\SevalKoca_Web\\SevalKocaApp\\SevalKocaApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Eyüphan Şimşek\\Desktop\\SevalKoca_Web\\sevalkocaApp\\SevalKocaApp.csproj",
+        "projectUniqueName": "C:\\Users\\Eyüphan Şimşek\\Desktop\\SevalKoca_Web\\SevalKocaApp\\SevalKocaApp.csproj",
         "projectName": "SevalKocaApp",
-        "projectPath": "C:\\Users\\Eyüphan Şimşek\\Desktop\\SevalKoca_Web\\sevalkocaApp\\SevalKocaApp.csproj",
+        "projectPath": "C:\\Users\\Eyüphan Şimşek\\Desktop\\SevalKoca_Web\\SevalKocaApp\\SevalKocaApp.csproj",
         "packagesPath": "C:\\Users\\Eyüphan Şimşek\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Eyüphan Şimşek\\Desktop\\SevalKoca_Web\\sevalkocaApp\\obj\\",
+        "outputPath": "C:\\Users\\Eyüphan Şimşek\\Desktop\\SevalKoca_Web\\SevalKocaApp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

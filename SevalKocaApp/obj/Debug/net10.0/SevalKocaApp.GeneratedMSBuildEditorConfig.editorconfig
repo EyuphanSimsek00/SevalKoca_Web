@@ -12,57 +12,57 @@ build_property.EntryPointFilePath =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = SevalKocaApp
 build_property.RootNamespace = SevalKocaApp
-build_property.ProjectDir = C:\Users\Eyüphan Şimşek\Desktop\SevalKoca_Web\sevalkocaApp\
+build_property.ProjectDir = C:\Users\Eyüphan Şimşek\Desktop\SevalKoca_Web\SevalKocaApp\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 10.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\Eyüphan Şimşek\Desktop\SevalKoca_Web\sevalkocaApp
+build_property.MSBuildProjectDirectory = C:\Users\Eyüphan Şimşek\Desktop\SevalKoca_Web\SevalKocaApp
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 10.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/Eyüphan Şimşek/Desktop/SevalKoca_Web/sevalkocaApp/Views/Home/Index.cshtml]
+[C:/Users/Eyüphan Şimşek/Desktop/SevalKoca_Web/SevalKocaApp/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eyüphan Şimşek/Desktop/SevalKoca_Web/sevalkocaApp/Views/Home/kategori.cshtml]
+[C:/Users/Eyüphan Şimşek/Desktop/SevalKoca_Web/SevalKocaApp/Views/Home/kategori.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxrYXRlZ29yaS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eyüphan Şimşek/Desktop/SevalKoca_Web/sevalkocaApp/Views/Home/login.cshtml]
+[C:/Users/Eyüphan Şimşek/Desktop/SevalKoca_Web/SevalKocaApp/Views/Home/login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxsb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eyüphan Şimşek/Desktop/SevalKoca_Web/sevalkocaApp/Views/Home/UrunDetay.cshtml]
+[C:/Users/Eyüphan Şimşek/Desktop/SevalKoca_Web/SevalKocaApp/Views/Home/UrunDetay.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxVcnVuRGV0YXkuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eyüphan Şimşek/Desktop/SevalKoca_Web/sevalkocaApp/Views/Home/UrunEkle.cshtml]
+[C:/Users/Eyüphan Şimşek/Desktop/SevalKoca_Web/SevalKocaApp/Views/Home/UrunEkle.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxVcnVuRWtsZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eyüphan Şimşek/Desktop/SevalKoca_Web/sevalkocaApp/Views/Home/UrunYonetimi.cshtml]
+[C:/Users/Eyüphan Şimşek/Desktop/SevalKoca_Web/SevalKocaApp/Views/Home/UrunYonetimi.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxVcnVuWW9uZXRpbWkuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eyüphan Şimşek/Desktop/SevalKoca_Web/sevalkocaApp/Views/Shared/Error.cshtml]
+[C:/Users/Eyüphan Şimşek/Desktop/SevalKoca_Web/SevalKocaApp/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eyüphan Şimşek/Desktop/SevalKoca_Web/sevalkocaApp/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/Eyüphan Şimşek/Desktop/SevalKoca_Web/SevalKocaApp/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eyüphan Şimşek/Desktop/SevalKoca_Web/sevalkocaApp/Views/_ViewImports.cshtml]
+[C:/Users/Eyüphan Şimşek/Desktop/SevalKoca_Web/SevalKocaApp/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eyüphan Şimşek/Desktop/SevalKoca_Web/sevalkocaApp/Views/_ViewStart.cshtml]
+[C:/Users/Eyüphan Şimşek/Desktop/SevalKoca_Web/SevalKocaApp/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Eyüphan Şimşek/Desktop/SevalKoca_Web/sevalkocaApp/Views/Shared/_Layout.cshtml]
+[C:/Users/Eyüphan Şimşek/Desktop/SevalKoca_Web/SevalKocaApp/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-jct1040tse

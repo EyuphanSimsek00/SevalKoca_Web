@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "wyxoPUx1JKs=",
+  "dgSpecHash": "Q3eCmlGoC8E=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Eyüphan Şimşek\\Desktop\\SevalKoca_Web\\sevalkocaApp\\SevalKocaApp.csproj",
+  "projectFilePath": "C:\\Users\\Eyüphan Şimşek\\Desktop\\SevalKoca_Web\\SevalKocaApp\\SevalKocaApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Eyüphan Şimşek\\.nuget\\packages\\microsoft.bcl.cryptography\\9.0.13\\microsoft.bcl.cryptography.9.0.13.nupkg.sha512",
     "C:\\Users\\Eyüphan Şimşek\\.nuget\\packages\\microsoft.data.sqlclient\\7.0.1\\microsoft.data.sqlclient.7.0.1.nupkg.sha512",
