@@ -55,7 +55,6 @@ C:\Users\Eyüphan Şimşek\Desktop\SevalKoca_Web\SevalKocaApp\obj\Debug\net10.0\
 C:\Users\Eyüphan Şimşek\Desktop\SevalKoca_Web\SevalKocaApp\obj\Debug\net10.0\scopedcss\bundle\SevalKocaApp.styles.css
 C:\Users\Eyüphan Şimşek\Desktop\SevalKoca_Web\SevalKocaApp\obj\Debug\net10.0\scopedcss\projectbundle\SevalKocaApp.bundle.scp.css
 C:\Users\Eyüphan Şimşek\Desktop\SevalKoca_Web\SevalKocaApp\obj\Debug\net10.0\compressed\wq2ny82vop-{0}-b9sayid5wm-b9sayid5wm.gz
-C:\Users\Eyüphan Şimşek\Desktop\SevalKoca_Web\SevalKocaApp\obj\Debug\net10.0\compressed\7vrhdelte3-{0}-61n19gt1b8-61n19gt1b8.gz
 C:\Users\Eyüphan Şimşek\Desktop\SevalKoca_Web\SevalKocaApp\obj\Debug\net10.0\compressed\japr4or55r-{0}-xtxxf3hu2r-xtxxf3hu2r.gz
 C:\Users\Eyüphan Şimşek\Desktop\SevalKoca_Web\SevalKocaApp\obj\Debug\net10.0\compressed\hqmdpml59y-{0}-bqjiyaj88i-bqjiyaj88i.gz
 C:\Users\Eyüphan Şimşek\Desktop\SevalKoca_Web\SevalKocaApp\obj\Debug\net10.0\compressed\5y23qut5kj-{0}-c2jlpeoesf-c2jlpeoesf.gz
@@ -132,3 +131,4 @@ C:\Users\Eyüphan Şimşek\Desktop\SevalKoca_Web\SevalKocaApp\obj\Debug\net10.0\
 C:\Users\Eyüphan Şimşek\Desktop\SevalKoca_Web\sevalkocaApp\obj\Debug\net10.0\compressed\rtg3a38clu-{0}-xdxrxrv7k5-xdxrxrv7k5.gz
 C:\Users\Eyüphan Şimşek\Desktop\SevalKoca_Web\SevalKocaApp\obj\Debug\net10.0\SevalKocaApp.sourcelink.json
 C:\Users\Eyüphan Şimşek\Desktop\SevalKoca_Web\SevalKocaApp\obj\Debug\net10.0\compressed\2egww5tdd7-{0}-ywbb94qrcp-ywbb94qrcp.gz
+C:\Users\Eyüphan Şimşek\Desktop\SevalKoca_Web\SevalKocaApp\obj\Debug\net10.0\compressed\7vrhdelte3-{0}-0jd0xn0mw1-0jd0xn0mw1.gz
