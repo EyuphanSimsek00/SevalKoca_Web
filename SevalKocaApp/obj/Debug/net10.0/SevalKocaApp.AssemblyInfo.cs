@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SevalKocaApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0b3d3ec391ee17e1d90f978bb2ee7be3ca201feb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ec1ca9ca6b0ad348b8438a5f3fa53f486b08378a")]
 [assembly: System.Reflection.AssemblyProductAttribute("SevalKocaApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SevalKocaApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -26,7 +26,8 @@ namespace SevalKocaApp.Controllers
 
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                string query = "SELECT UrunID, UrunAdi, Fiyat, GorselURL FROM Urunler";
+                // Sadece son eklenen 4 ürünü çek
+                string query = "SELECT TOP 4 UrunID, UrunAdi, Fiyat, GorselURL FROM Urunler ORDER BY UrunID DESC";
                 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {

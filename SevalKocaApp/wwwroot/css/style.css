@@ -271,6 +271,7 @@ a {
 .footer-col ul, .footer-col ul.footer-links {
     list-style: none;
     padding: 0;
+    padding-left: 0 !important;
     margin: 0;
 }
 
