@@ -282,8 +282,8 @@ namespace SevalKocaApp.Controllers
                 using (SqlConnection con = new SqlConnection(_connectionString))
                 {
                     // SQL Ekleme Sorgumuz — KategoriID artık formdan geliyor (hardcoded değil)
-                    string query = "INSERT INTO Urunler (KategoriID, UrunAdi, Fiyat, GorselURL, StokMiktari, EklenmeTarihi) " +
-                                   "VALUES (@kategoriId, @urunAdi, @fiyat, @gorselUrl, 15, GETDATE())";
+                    string query = "INSERT INTO Urunler (KategoriID, UrunAdi, Fiyat, GorselURL, Aciklama, StokMiktari, EklenmeTarihi) " +
+                                   "VALUES (@kategoriId, @urunAdi, @fiyat, @gorselUrl, @aciklama, 15, GETDATE())";
 
                     using (SqlCommand cmd = new SqlCommand(query, con))
                     {
@@ -292,6 +292,7 @@ namespace SevalKocaApp.Controllers
                         cmd.Parameters.AddWithValue("@urunAdi", yeniUrun.UrunAdi);
                         cmd.Parameters.AddWithValue("@fiyat", yeniUrun.Fiyat);
                         cmd.Parameters.AddWithValue("@gorselUrl", yeniUrun.GorselURL ?? "assets/ceket.jpg");
+                        cmd.Parameters.AddWithValue("@aciklama", yeniUrun.Aciklama ?? (object)DBNull.Value);
 
                         con.Open();
                         cmd.ExecuteNonQuery(); // Sorguyu çalıştır ve SQL'e satırı ekle
