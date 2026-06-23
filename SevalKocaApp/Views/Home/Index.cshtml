@@ -32,15 +32,17 @@
         <h2>EN YENİLER</h2>
     </div>
 
-    <div class="products-grid">
+    <div class="row">
             
         @foreach (var urun in Model)
         {
-            <a asp-controller="Home" asp-action="UrunDetay" asp-route-id="@urun.UrunID" class="product-card">
-                <img src="~/@urun.GorselURL" alt="@urun.UrunAdi">
-                <h3>@urun.UrunAdi</h3>
-                <p class="price">₺@urun.Fiyat</p>
-            </a>
+            <div class="col-6 col-md-3 mb-4">
+                <a asp-controller="Home" asp-action="UrunDetay" asp-route-id="@urun.UrunID" class="product-card">
+                    <img src="~/@urun.GorselURL" alt="@urun.UrunAdi" class="img-fluid">
+                    <h3>@urun.UrunAdi</h3>
+                    <p class="price">₺@urun.Fiyat</p>
+                </a>
+            </div>
         }
 
     </div>

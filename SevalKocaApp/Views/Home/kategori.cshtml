@@ -9,20 +9,19 @@
     <div class="category-header">
         <h1 class="category-title">@(ViewBag.KategoriAdi ?? "TÜM ÜRÜNLER")</h1>
         <div class="category-filters">
-            <!-- Sıralama Dropdown -->
-            <div class="sort-dropdown">
-                <span class="sort-trigger" onclick="document.getElementById('siralamaMenu').classList.toggle('sort-open')">
-                    Sırala <i class="fa-solid fa-chevron-down"></i>
-                </span>
-                <div id="siralamaMenu" class="sort-menu">
-                    @{
-                        // Mevcut kategori ID'sini URL parametresinde koruyoruz
-                        string kategoriParam = ViewBag.SeciliKategoriID != null ? "&id=" + ViewBag.SeciliKategoriID : "";
-                    }
-                    <a href="/Home/Kategori?siralama=fiyat_artan@kategoriParam">Fiyat (Düşükten Yükseğe)</a>
-                    <a href="/Home/Kategori?siralama=fiyat_azalan@kategoriParam">Fiyat (Yüksekten Düşüğe)</a>
-                    <a href="/Home/Kategori?siralama=isim_az@kategoriParam">İsim (A-Z)</a>
-                </div>
+            <!-- Sıralama Formu -->
+            <form method="get" action="/Home/Kategori" class="d-inline-block">
+                @if (ViewBag.SeciliKategoriID != null)
+                {
+                    <input type="hidden" name="id" value="@ViewBag.SeciliKategoriID" />
+                }
+                <select name="siralama" onchange="this.form.submit()" class="form-select form-select-sm" style="width: auto; display: inline-block; cursor: pointer;">
+                    <option value="">Sıralama Seçiniz</option>
+                    <option value="FiyatArtan" selected="@(ViewBag.SeciliSiralama == "FiyatArtan" ? "selected" : null)">Fiyat (Düşükten Yükseğe)</option>
+                    <option value="FiyatAzalan" selected="@(ViewBag.SeciliSiralama == "FiyatAzalan" ? "selected" : null)">Fiyat (Yüksekten Düşüğe)</option>
+                    <option value="IsimAZ" selected="@(ViewBag.SeciliSiralama == "IsimAZ" ? "selected" : null)">İsim (A-Z)</option>
+                </select>
+            </form>
             </div>
         </div>
     </div>

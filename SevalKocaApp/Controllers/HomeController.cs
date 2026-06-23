@@ -130,13 +130,13 @@ namespace SevalKocaApp.Controllers
                 // Sıralama parametresine göre ORDER BY ekle
                 switch (siralama)
                 {
-                    case "fiyat_artan":
+                    case "FiyatArtan":
                         query += " ORDER BY Fiyat ASC";
                         break;
-                    case "fiyat_azalan":
+                    case "FiyatAzalan":
                         query += " ORDER BY Fiyat DESC";
                         break;
-                    case "isim_az":
+                    case "IsimAZ":
                         query += " ORDER BY UrunAdi ASC";
                         break;
                     default:

@@ -260,30 +260,32 @@ a {
 }
 
 .footer-col h3 {
-    font-size: 15px;
+    font-size: 18px;
     font-weight: 500;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
     color: #fff;
     letter-spacing: 0.5px;
     font-family: 'Cinzel', serif;
 }
 
-.footer-col ul {
+.footer-col ul, .footer-col ul.footer-links {
     list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-.footer-col ul li {
-    margin-bottom: 10px;
+.footer-col ul li, .footer-col ul.footer-links li {
+    margin-bottom: 12px;
     line-height: 1.6;
 }
 
-.footer-col ul li a {
+.footer-col ul li a, .footer-col ul.footer-links li a {
     color: #bbb;
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
-.footer-col ul li a:hover {
+.footer-col ul li a:hover, .footer-col ul.footer-links li a:hover {
     color: #fff;
 }
 

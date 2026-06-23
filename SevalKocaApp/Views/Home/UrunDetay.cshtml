@@ -11,18 +11,22 @@
          <a href="~/">Ana Sayfa</a> / <a href="~/Home/Kategori">Ürünler</a> / <span>@Model.UrunAdi</span>
     </div>
 
-          <div class="product-gallery">
-               <div class="main-image">
-                    <img src="~/@Model.GorselURL" alt="@Model.UrunAdi">
-               </div>
-          </div>
+    <div class="row align-items-start">
+        <div class="col-md-6">
+            <div class="product-gallery">
+                 <div class="main-image">
+                      <img src="~/@Model.GorselURL" alt="@Model.UrunAdi" class="img-fluid rounded" style="max-height: 600px; object-fit: cover; width: 100%;">
+                 </div>
+            </div>
+        </div>
 
-         <!-- Sağ Taraf: Ürün Bilgileri ve Satın Alma -->
-         <div class="product-info">
-              <h1 class="product-title">@Model.UrunAdi</h1>
-              <p class="product-price">₺@Model.Fiyat</p>
-              
-              <!-- Dinamik Açıklama: Veritabanındaki Aciklama sütunundan geliyor -->
+        <!-- Sağ Taraf: Ürün Bilgileri ve Satın Alma -->
+        <div class="col-md-6">
+            <div class="product-info">
+                 <h1 class="product-title">@Model.UrunAdi</h1>
+                 <p class="product-price">₺@Model.Fiyat</p>
+                 
+                 <!-- Dinamik Açıklama: Veritabanındaki Aciklama sütunundan geliyor -->
               <div class="product-description">
                   @if (!string.IsNullOrEmpty(Model.Aciklama))
                   {
@@ -61,6 +65,10 @@
          <p>Siparişleriniz 1-3 iş günü içerisinde kargoya teslim edilmektedir. Etiketi koparılmamış ve kullanılmamış ürünleri 14 gün içerisinde ücretsiz iade edebilirsiniz.</p>
      </details>
 </div>
+
+</div> <!-- /.product-info -->
+        </div> <!-- /.col-md-6 -->
+    </div> <!-- /.row -->
 
 <script>
     // Beden butonlarına tıklanınca seçili beden stilini güncelle
