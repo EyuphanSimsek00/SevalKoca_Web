@@ -1,4 +1,4 @@
-@model List<SevalKocaApp.Models.Urun>
+﻿@model List<SevalKocaApp.Models.Urun>
 @{
     ViewData["Title"] = "Ana Sayfa";
 }
@@ -48,14 +48,16 @@
     </div>
 </section>
 
-<section class="newsletter-section">
+<section class="newsletter-section" style="max-width: 600px; margin: 0 auto; text-align: center; padding: 30px 15px;">
     <h2>Üye Ol VE İlk Siparişine Özel %10 İndirim Kazan!</h2>
-    <div class="newsletter-form">
-        <input type="email" placeholder="email">
-        <div class="checkbox-area">
-            <input type="checkbox" id="kampanya">
-            <label for="kampanya">Kampanya ve duyurulardan haberdar olmak istiyorum.</label>
-        </div>
-        <button class="btn-gray">Üye Ol</button>
+    <div class="newsletter-form" style="margin-top: 20px;">
+        <a href="/Home/Login" class="btn-gray" style="display: inline-block; text-decoration: none; text-align: center; padding: 10px 40px;">Üye Ol</a>
     </div>
 </section>
+<!-- <section class="newsletter-section">
+    <h2>Üye Ol VE İlk Siparişine Özel %10 İndirim Kazan!</h2>
+    <div class="newsletter-form">
+        <a href="/Home/Login" class="btn-gray" style="display: inline-block; text-decoration: none; text-align: center;">Üye Ol</a>
+    </div>
+</section> -->
+
