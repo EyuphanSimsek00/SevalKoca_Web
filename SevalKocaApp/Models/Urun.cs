@@ -8,5 +8,6 @@ namespace SevalKocaApp.Models
         public decimal Fiyat { get; set; }
         public string GorselURL { get; set; }
         public string Aciklama { get; set; }
+        public int StokMiktari { get; set; }
     }
 }

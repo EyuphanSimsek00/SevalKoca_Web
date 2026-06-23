@@ -304,6 +304,102 @@ namespace SevalKocaApp.Controllers
             return RedirectToAction("UrunYonetimi");
         }
 
+        // ADMIN: Ürün Düzenleme Sayfasını Açan Metot (GET)
+        [HttpGet]
+        public IActionResult UrunDuzenle(int id)
+        {
+            if (HttpContext.Session.GetString("KullaniciRol") != "Admin")
+            {
+                return RedirectToAction("Login");
+            }
+
+            List<dynamic> kategoriler = new List<dynamic>();
+            Urun urun = null;
+
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                // Kategorileri çek
+                string catQuery = "SELECT KategoriID, KategoriAdi FROM Kategoriler";
+                using (SqlCommand cmdCat = new SqlCommand(catQuery, con))
+                {
+                    con.Open();
+                    using (SqlDataReader reader = cmdCat.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            kategoriler.Add(new { KategoriID = Convert.ToInt32(reader["KategoriID"]), KategoriAdi = reader["KategoriAdi"].ToString() });
+                        }
+                    }
+                    con.Close();
+                }
+
+                // Ürün bilgilerini çek
+                string urunQuery = "SELECT * FROM Urunler WHERE UrunID = @id";
+                using (SqlCommand cmdUrun = new SqlCommand(urunQuery, con))
+                {
+                    cmdUrun.Parameters.AddWithValue("@id", id);
+                    con.Open();
+                    using (SqlDataReader reader = cmdUrun.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            urun = new Urun
+                            {
+                                UrunID = Convert.ToInt32(reader["UrunID"]),
+                                UrunAdi = reader["UrunAdi"].ToString(),
+                                KategoriID = Convert.ToInt32(reader["KategoriID"]),
+                                Fiyat = Convert.ToDecimal(reader["Fiyat"]),
+                                Aciklama = reader["Aciklama"] != DBNull.Value ? reader["Aciklama"].ToString() : null,
+                                GorselURL = reader["GorselURL"].ToString(),
+                                StokMiktari = Convert.ToInt32(reader["StokMiktari"])
+                            };
+                        }
+                    }
+                    con.Close();
+                }
+            }
+
+            if (urun == null)
+            {
+                return RedirectToAction("UrunYonetimi");
+            }
+
+            ViewBag.Kategoriler = kategoriler;
+            return View(urun);
+        }
+
+        // ADMIN: Ürün Güncellemesini SQL'e Yazan Metot (POST)
+        [HttpPost]
+        public IActionResult UrunDuzenle(Urun guncelUrun)
+        {
+            if (HttpContext.Session.GetString("KullaniciRol") != "Admin")
+            {
+                return RedirectToAction("Login");
+            }
+
+            if (guncelUrun != null)
+            {
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    string query = "UPDATE Urunler SET UrunAdi=@ad, KategoriID=@kategori, Fiyat=@fiyat, Aciklama=@aciklama, GorselURL=@gorsel, StokMiktari=@stok WHERE UrunID=@id";
+                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    {
+                        cmd.Parameters.AddWithValue("@id", guncelUrun.UrunID);
+                        cmd.Parameters.AddWithValue("@ad", guncelUrun.UrunAdi);
+                        cmd.Parameters.AddWithValue("@kategori", guncelUrun.KategoriID);
+                        cmd.Parameters.AddWithValue("@fiyat", guncelUrun.Fiyat);
+                        cmd.Parameters.AddWithValue("@aciklama", guncelUrun.Aciklama ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@gorsel", guncelUrun.GorselURL ?? "assets/ceket.jpg");
+                        cmd.Parameters.AddWithValue("@stok", guncelUrun.StokMiktari > 0 ? guncelUrun.StokMiktari : 15);
+
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            return RedirectToAction("UrunYonetimi");
+        }
+
         // ==========================================
         //  ADMİN: ÜRÜN YÖNETİM PANELİ
         // ==========================================

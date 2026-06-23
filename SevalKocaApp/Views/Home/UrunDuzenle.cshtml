@@ -1,0 +1,68 @@
+@model SevalKocaApp.Models.Urun
+@{
+    ViewData["Title"] = "Ürün Düzenle - Yönetim";
+}
+
+<div class="admin-container" style="max-width: 600px; margin: 50px auto; padding: 30px; border: 1px solid #eee; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+    
+    <h2 style="font-family: 'Cinzel', serif; text-align: center; margin-bottom: 30px; letter-spacing: 1px;">ÜRÜN GÜNCELLE</h2>
+
+    <form asp-action="UrunDuzenle" method="post" style="display: flex; flex-direction: column; gap: 20px;">
+        
+        <!-- Gizli ID Alanı -->
+        <input type="hidden" name="UrunID" value="@Model.UrunID" />
+
+        <!-- Kategori Seçimi (Veritabanından dinamik olarak geliyor) -->
+        <div class="form-group">
+            <label style="display: block; margin-bottom: 8px; font-weight: 500;">Kategori Seçin</label>
+            <select name="KategoriID" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; background: #fff; cursor: pointer;">
+                <option value="">-- Kategori Seçiniz --</option>
+                @if (ViewBag.Kategoriler != null)
+                {
+                    foreach (var kat in ViewBag.Kategoriler)
+                    {
+                        if (Model.KategoriID == kat.KategoriID)
+                        {
+                            <option value="@kat.KategoriID" selected>@kat.KategoriAdi</option>
+                        }
+                        else
+                        {
+                            <option value="@kat.KategoriID">@kat.KategoriAdi</option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label style="display: block; margin-bottom: 8px; font-weight: 500;">Ürün Adı</label>
+            <input asp-for="UrunAdi" type="text" placeholder="Örn: Siyah Kaşe Kaban" required value="@Model.UrunAdi" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;" />
+        </div>
+
+        <div class="form-group">
+            <label style="display: block; margin-bottom: 8px; font-weight: 500;">Fiyat (₺)</label>
+            <!-- input number için string gösterimini ondalıklı olarak noktalı yapmamız gerekebilir veya doğrudan value basılabilir -->
+            <input asp-for="Fiyat" type="text" placeholder="Örn: 3499.90" required value="@Model.Fiyat.ToString("0.00").Replace(",", ".")" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;" />
+        </div>
+
+        <div class="form-group">
+            <label style="display: block; margin-bottom: 8px; font-weight: 500;">Stok Miktarı</label>
+            <input asp-for="StokMiktari" type="number" required value="@Model.StokMiktari" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;" />
+        </div>
+
+        <div class="form-group">
+            <label style="display: block; margin-bottom: 8px; font-weight: 500;">Görsel Dosya Yolu</label>
+            <input asp-for="GorselURL" type="text" placeholder="Örn: assets/takim.jpg" required value="@Model.GorselURL" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;" />
+            <small style="color: #777; display: block; margin-top: 5px;">Mevcut görsel URL'i.</small>
+        </div>
+
+        <div class="form-group">
+            <label style="display: block; margin-bottom: 8px; font-weight: 500;">Ürün Açıklaması</label>
+            <textarea name="Aciklama" class="form-control" rows="3" placeholder="Ürün açıklaması girin..." style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; font-family: inherit; resize: vertical;">@Model.Aciklama</textarea>
+        </div>
+
+        <button type="submit" style="width: 100%; padding: 15px; background-color: #007bff; color: #fff; border: none; border-radius: 4px; font-size: 1.1rem; cursor: pointer; transition: background 0.3s; font-weight: bold; letter-spacing: 1px;">
+            DEĞİŞİKLİKLERİ KAYDET
+        </button>
+    </form>
+</div>
