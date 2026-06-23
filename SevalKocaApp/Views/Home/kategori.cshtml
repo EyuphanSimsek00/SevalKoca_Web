@@ -1,15 +1,29 @@
 @model List<SevalKocaApp.Models.Urun>
 @{
-    ViewData["Title"] = "Üst Giyim";
+    // Sayfa başlığını ViewBag'den dinamik olarak alıyoruz
+    ViewData["Title"] = ViewBag.KategoriAdi ?? "Tüm Ürünler";
 }
 
 <main class="category-page-container">
     
     <div class="category-header">
-        <h1 class="category-title">ÜST GİYİM</h1>
+        <h1 class="category-title">@(ViewBag.KategoriAdi ?? "TÜM ÜRÜNLER")</h1>
         <div class="category-filters">
-            <span>Filtrele <i class="fa-solid fa-sliders"></i></span>
-            <span>Sırala <i class="fa-solid fa-chevron-down"></i></span>
+            <!-- Sıralama Dropdown -->
+            <div class="sort-dropdown">
+                <span class="sort-trigger" onclick="document.getElementById('siralamaMenu').classList.toggle('sort-open')">
+                    Sırala <i class="fa-solid fa-chevron-down"></i>
+                </span>
+                <div id="siralamaMenu" class="sort-menu">
+                    @{
+                        // Mevcut kategori ID'sini URL parametresinde koruyoruz
+                        string kategoriParam = ViewBag.SeciliKategoriID != null ? "&id=" + ViewBag.SeciliKategoriID : "";
+                    }
+                    <a href="/Home/Kategori?siralama=fiyat_artan@kategoriParam">Fiyat (Düşükten Yükseğe)</a>
+                    <a href="/Home/Kategori?siralama=fiyat_azalan@kategoriParam">Fiyat (Yüksekten Düşüğe)</a>
+                    <a href="/Home/Kategori?siralama=isim_az@kategoriParam">İsim (A-Z)</a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -22,6 +36,13 @@
                 <h3>@urun.UrunAdi</h3>
                 <p class="price">₺@urun.Fiyat</p>
             </a>
+        }
+
+        @if (Model.Count == 0)
+        {
+            <p style="text-align: center; color: #888; padding: 60px 0; font-size: 1.1rem; width: 100%;">
+                Bu kategoride henüz ürün bulunmamaktadır.
+            </p>
         }
 
     </div>

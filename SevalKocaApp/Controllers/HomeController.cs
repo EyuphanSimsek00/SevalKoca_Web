@@ -19,15 +19,13 @@ namespace SevalKocaApp.Controllers
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        // Ana Sayfa (Index.cshtml) Yüklendiğinde Çalışacak Metot (ARAMA DESTEKLİ)
-       // Ana Sayfa (Index.cshtml) Yüklendiğinde Çalışacak Metot
+        // Ana Sayfa (Index.cshtml) Yüklendiğinde Çalışacak Metot
         public IActionResult Index()
         {
             List<Urun> urunler = new List<Urun>();
 
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                // Filtresiz, saf SQL sorgusu: Sadece tüm ürünleri getir
                 string query = "SELECT UrunID, UrunAdi, Fiyat, GorselURL FROM Urunler";
                 
                 using (SqlCommand cmd = new SqlCommand(query, con))
@@ -50,21 +48,110 @@ namespace SevalKocaApp.Controllers
             return View(urunler);
         }
 
-        // Kategori Sayfasına Yönlendirme Metodu
-        public IActionResult Kategori()
+        // ==========================================
+        //  ARAMA METODU
+        // ==========================================
+
+        // ARAMA: Navbar'daki arama ikonundan gelen arama sorgusunu işler
+        public IActionResult Ara(string q)
         {
-            // Bu sayfada göstereceğimiz ürünleri tutacak boş liste
+            List<Urun> sonuclar = new List<Urun>();
+
+            // Arama terimi boş değilse sorguyu çalıştır
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    // LIKE '%aranan%' mantığıyla ürün adına göre arama
+                    string query = "SELECT UrunID, UrunAdi, Fiyat, GorselURL FROM Urunler WHERE UrunAdi LIKE @aranan";
+
+                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    {
+                        cmd.Parameters.AddWithValue("@aranan", "%" + q + "%");
+                        con.Open();
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Urun u = new Urun();
+                                u.UrunID = Convert.ToInt32(reader["UrunID"]);
+                                u.UrunAdi = reader["UrunAdi"].ToString();
+                                u.Fiyat = Convert.ToDecimal(reader["Fiyat"]);
+                                u.GorselURL = reader["GorselURL"].ToString();
+                                sonuclar.Add(u);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Aranan kelimeyi View'da gösterebilmek için ViewBag'e yazıyoruz
+            ViewBag.AramaTerimi = q;
+            return View(sonuclar);
+        }
+
+        // ==========================================
+        //  KATEGORİ SAYFASI (DİNAMİK FİLTRELEME + SIRALAMA)
+        // ==========================================
+
+        // Kategori Sayfasına Yönlendirme Metodu (Dinamik KategoriID + Sıralama desteği)
+        public IActionResult Kategori(int? id, string siralama)
+        {
             List<Urun> kategoriUrunleri = new List<Urun>();
+            string kategoriAdi = "TÜM ÜRÜNLER";
 
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                // DİKKAT: Sadece "Üst Giyim" (KategoriID = 1) olanları çekiyoruz!
-                string query = "SELECT UrunID, UrunAdi, Fiyat, GorselURL FROM Urunler WHERE KategoriID = 1";
-                
+                // 1. Eğer kategori ID geliyorsa, o kategorinin adını çek
+                if (id.HasValue)
+                {
+                    string kategoriQuery = "SELECT KategoriAdi FROM Kategoriler WHERE KategoriID = @katId";
+                    using (SqlCommand katCmd = new SqlCommand(kategoriQuery, con))
+                    {
+                        katCmd.Parameters.AddWithValue("@katId", id.Value);
+                        con.Open();
+                        object sonuc = katCmd.ExecuteScalar();
+                        if (sonuc != null)
+                        {
+                            kategoriAdi = sonuc.ToString().ToUpper();
+                        }
+                        con.Close();
+                    }
+                }
+
+                // 2. Ürünleri çek (filtreli veya filtresiz)
+                string query = "SELECT UrunID, UrunAdi, Fiyat, GorselURL FROM Urunler";
+
+                if (id.HasValue)
+                {
+                    query += " WHERE KategoriID = @katId";
+                }
+
+                // Sıralama parametresine göre ORDER BY ekle
+                switch (siralama)
+                {
+                    case "fiyat_artan":
+                        query += " ORDER BY Fiyat ASC";
+                        break;
+                    case "fiyat_azalan":
+                        query += " ORDER BY Fiyat DESC";
+                        break;
+                    case "isim_az":
+                        query += " ORDER BY UrunAdi ASC";
+                        break;
+                    default:
+                        query += " ORDER BY UrunID DESC"; // Varsayılan: en yeni önce
+                        break;
+                }
+
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
+                    if (id.HasValue)
+                    {
+                        cmd.Parameters.AddWithValue("@katId", id.Value);
+                    }
+
                     con.Open();
-                    
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
@@ -74,16 +161,22 @@ namespace SevalKocaApp.Controllers
                             u.UrunAdi = reader["UrunAdi"].ToString();
                             u.Fiyat = Convert.ToDecimal(reader["Fiyat"]);
                             u.GorselURL = reader["GorselURL"].ToString();
-
                             kategoriUrunleri.Add(u);
                         }
                     }
                 }
             }
 
-            // Doldurduğumuz listeyi Kategori sayfasına fırlatıyoruz
+            // View'a gönderilecek bilgiler
+            ViewBag.KategoriAdi = kategoriAdi;
+            ViewBag.SeciliKategoriID = id;
+            ViewBag.SeciliSiralama = siralama;
             return View(kategoriUrunleri);
         }
+
+        // ==========================================
+        //  ÜRÜN DETAY SAYFASI (DİNAMİK AÇIKLAMA DESTEKLİ)
+        // ==========================================
 
         // Ürün Detay Sayfasına Yönlendirme Metodu
         public IActionResult UrunDetay(int id)
@@ -98,7 +191,8 @@ namespace SevalKocaApp.Controllers
 
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                string query = "SELECT UrunID, UrunAdi, Fiyat, GorselURL FROM Urunler WHERE UrunID = @gelenId";
+                // Aciklama sütunu da sorguya eklendi (dinamik açıklama için)
+                string query = "SELECT UrunID, UrunAdi, Fiyat, GorselURL, Aciklama FROM Urunler WHERE UrunID = @gelenId";
                 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
@@ -115,6 +209,7 @@ namespace SevalKocaApp.Controllers
                             secilenUrun.UrunAdi = reader["UrunAdi"].ToString();
                             secilenUrun.Fiyat = Convert.ToDecimal(reader["Fiyat"]);
                             secilenUrun.GorselURL = reader["GorselURL"].ToString();
+                            secilenUrun.Aciklama = reader["Aciklama"]?.ToString();
                         }
                     }
                 }
@@ -130,17 +225,43 @@ namespace SevalKocaApp.Controllers
             return View(secilenUrun);
         }
 
-        // --- YENİ EKLENEN ADMİN KODLARI BAŞLANGICI ---
+        // ==========================================
+        //  ADMİN: ÜRÜN EKLEME (KATEGORİ DROPDOWN DESTEKLİ)
+        // ==========================================
 
         // ADMIN: Ürün Ekleme Sayfasını Açan Metot (GET)
         public IActionResult UrunEkle()
         {
-            // 🔒 KORUMA KALKANI
-            if (HttpContext.Session.GetString("GirisYapildi") != "Evet")
+            // 🔒 KORUMA KALKANI: Sadece Admin rolündeki kullanıcı erişebilir
+            if (HttpContext.Session.GetString("KullaniciRol") != "Admin")
             {
                 return RedirectToAction("Login");
             }
 
+            // Kategoriler tablosundan tüm kategorileri çekip ViewBag ile View'a gönderiyoruz
+            List<dynamic> kategoriler = new List<dynamic>();
+
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT KategoriID, KategoriAdi FROM Kategoriler";
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            kategoriler.Add(new
+                            {
+                                KategoriID = Convert.ToInt32(reader["KategoriID"]),
+                                KategoriAdi = reader["KategoriAdi"].ToString()
+                            });
+                        }
+                    }
+                }
+            }
+
+            ViewBag.Kategoriler = kategoriler;
             return View();
         }
 
@@ -148,8 +269,8 @@ namespace SevalKocaApp.Controllers
         [HttpPost]
         public IActionResult UrunEkle(Urun yeniUrun)
         {
-            // 🔒 KORUMA KALKANI
-            if (HttpContext.Session.GetString("GirisYapildi") != "Evet")
+            // 🔒 KORUMA KALKANI: Sadece Admin rolündeki kullanıcı erişebilir
+            if (HttpContext.Session.GetString("KullaniciRol") != "Admin")
             {
                 return RedirectToAction("Login");
             }
@@ -159,14 +280,14 @@ namespace SevalKocaApp.Controllers
             {
                 using (SqlConnection con = new SqlConnection(_connectionString))
                 {
-                    // SQL Ekleme Sorgumuz
-                    // "EkleneMeTarihi" kelimesindeki fazla "e" harfini kaldırdık -> "EklenmeTarihi" oldu
+                    // SQL Ekleme Sorgumuz — KategoriID artık formdan geliyor (hardcoded değil)
                     string query = "INSERT INTO Urunler (KategoriID, UrunAdi, Fiyat, GorselURL, StokMiktari, EklenmeTarihi) " +
-                                   "VALUES (1, @urunAdi, @fiyat, @gorselUrl, 15, GETDATE())";
+                                   "VALUES (@kategoriId, @urunAdi, @fiyat, @gorselUrl, 15, GETDATE())";
 
                     using (SqlCommand cmd = new SqlCommand(query, con))
                     {
                         // Formdan gelen dinamik verileri sorgumuza güvenli bir şekilde bağlıyoruz
+                        cmd.Parameters.AddWithValue("@kategoriId", yeniUrun.KategoriID);
                         cmd.Parameters.AddWithValue("@urunAdi", yeniUrun.UrunAdi);
                         cmd.Parameters.AddWithValue("@fiyat", yeniUrun.Fiyat);
                         cmd.Parameters.AddWithValue("@gorselUrl", yeniUrun.GorselURL ?? "assets/ceket.jpg");
@@ -177,17 +298,19 @@ namespace SevalKocaApp.Controllers
                 }
             }
 
-            // Ürün başarıyla eklendikten sonra kullanıcıyı otomatik olarak Ana Sayfaya (Index) fırlat
-            return RedirectToAction("Index");
+            // Ürün başarıyla eklendikten sonra kullanıcıyı otomatik olarak Yönetim Paneli'ne fırlat
+            return RedirectToAction("UrunYonetimi");
         }
-        
-        // --- YENİ EKLENEN ADMİN KODLARI BİTİŞİ ---
-        
+
+        // ==========================================
+        //  ADMİN: ÜRÜN YÖNETİM PANELİ
+        // ==========================================
+
         // ADMIN: Tüm Ürünleri Tablo Halinde Listeleyen Yönetim Sayfası
         public IActionResult UrunYonetimi()
         {
-            // 🔒 KORUMA KALKANI
-            if (HttpContext.Session.GetString("GirisYapildi") != "Evet")
+            // 🔒 KORUMA KALKANI: Sadece Admin rolündeki kullanıcı erişebilir
+            if (HttpContext.Session.GetString("KullaniciRol") != "Admin")
             {
                 return RedirectToAction("Login");
             }
@@ -221,8 +344,8 @@ namespace SevalKocaApp.Controllers
         // ADMIN: Seçilen Ürünü Veritabanından Silen Metot
         public IActionResult UrunSil(int id)
         {
-            // 🔒 KORUMA KALKANI
-            if (HttpContext.Session.GetString("GirisYapildi") != "Evet")
+            // 🔒 KORUMA KALKANI: Sadece Admin rolündeki kullanıcı erişebilir
+            if (HttpContext.Session.GetString("KullaniciRol") != "Admin")
             {
                 return RedirectToAction("Login");
             }
@@ -245,7 +368,7 @@ namespace SevalKocaApp.Controllers
         }
 
         // ==========================================
-        //  OTURUM YÖNETİMİ METOTLARI (LOGIN / LOGOUT)
+        //  OTURUM YÖNETİMİ METOTLARI (LOGIN / KAYIT OL / LOGOUT)
         // ==========================================
 
         // LOGIN: Giriş Sayfasını Açan Metot (GET)
@@ -254,22 +377,98 @@ namespace SevalKocaApp.Controllers
             return View();
         }
 
-        // LOGIN: Klasik C# Sorgusu ile Giriş Kontrolü (POST)
+        // LOGIN: Veritabanı Tabanlı Giriş Kontrolü (POST)
         [HttpPost]
-        public IActionResult Login(string username, string password)
+        public IActionResult Login(string email, string sifre)
         {
-            if (username == "admin" && password == "1234")
+            using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                // Bilgiler doğruysa hafızaya oturumun açıldığını kaydediyoruz
-                HttpContext.Session.SetString("GirisYapildi", "Evet");
-                
-                // Başarılı girişte doğrudan korumalı panele yönlendir
-                return RedirectToAction("UrunYonetimi");
+                // Kullanıcılar tablosundan email ve şifre eşleşmesi kontrol ediliyor
+                string query = "SELECT KullaniciID, Ad, Soyad, Rol FROM Kullanicilar WHERE Email = @email AND Sifre = @sifre";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@email", email ?? "");
+                    cmd.Parameters.AddWithValue("@sifre", sifre ?? "");
+
+                    con.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            // Bilgiler doğruysa Session'a kullanıcı bilgilerini kaydet
+                            HttpContext.Session.SetString("GirisYapildi", "Evet");
+                            HttpContext.Session.SetString("KullaniciAd", reader["Ad"].ToString());
+                            HttpContext.Session.SetString("KullaniciSoyad", reader["Soyad"].ToString());
+                            HttpContext.Session.SetString("KullaniciRol", reader["Rol"].ToString());
+                            HttpContext.Session.SetInt32("KullaniciID", Convert.ToInt32(reader["KullaniciID"]));
+
+                            // Rol kontrolü: Admin ise panele, User ise ana sayfaya yönlendir
+                            if (reader["Rol"].ToString() == "Admin")
+                            {
+                                return RedirectToAction("UrunYonetimi");
+                            }
+                            return RedirectToAction("Index");
+                        }
+                    }
+                }
             }
 
             // Hatalıysa ekranda gösterilecek mesajı yükle
-            ViewBag.HataMesaji = "Kullanıcı adı veya şifre hatalı!";
+            ViewBag.HataMesaji = "E-posta veya şifre hatalı!";
             return View();
+        }
+
+        // KAYIT OL: Yeni Kullanıcı Kaydı (POST)
+        [HttpPost]
+        public IActionResult KayitOl(string ad, string soyad, string email, string sifre)
+        {
+            // Basit doğrulama
+            if (string.IsNullOrWhiteSpace(ad) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(sifre))
+            {
+                ViewBag.KayitHata = "Tüm alanları doldurun!";
+                ViewBag.AktifSekme = "kayit"; // Kayıt sekmesini açık tut
+                return View("Login");
+            }
+
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                // Önce bu e-posta ile kayıtlı kullanıcı var mı kontrol et
+                string kontrolQuery = "SELECT COUNT(*) FROM Kullanicilar WHERE Email = @email";
+                using (SqlCommand kontrolCmd = new SqlCommand(kontrolQuery, con))
+                {
+                    kontrolCmd.Parameters.AddWithValue("@email", email);
+                    con.Open();
+                    int kayitliMi = (int)kontrolCmd.ExecuteScalar();
+                    con.Close();
+
+                    if (kayitliMi > 0)
+                    {
+                        ViewBag.KayitHata = "Bu e-posta adresi zaten kayıtlı!";
+                        ViewBag.AktifSekme = "kayit";
+                        return View("Login");
+                    }
+                }
+
+                // Yeni kullanıcıyı veritabanına ekle (Rol varsayılan olarak "User")
+                string query = "INSERT INTO Kullanicilar (Ad, Soyad, Email, Sifre, Rol, KayitTarihi) " +
+                               "VALUES (@ad, @soyad, @email, @sifre, 'User', GETDATE())";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@ad", ad);
+                    cmd.Parameters.AddWithValue("@soyad", soyad);
+                    cmd.Parameters.AddWithValue("@email", email);
+                    cmd.Parameters.AddWithValue("@sifre", sifre);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            // Kayıt başarılı, giriş sayfasına yönlendir ve başarı mesajı göster
+            ViewBag.BasariMesaji = "Kayıt başarılı! Şimdi giriş yapabilirsiniz.";
+            return View("Login");
         }
 
         // LOGOUT: Oturumu Tamamen Temizleme ve Çıkış Yapma
@@ -278,6 +477,11 @@ namespace SevalKocaApp.Controllers
             HttpContext.Session.Clear(); // Hafızadaki oturum verilerini sıfırla
             return RedirectToAction("Index"); // Ana sayfaya güvenle geri gönder
         }
+
+        // ==========================================
+        //  SEPET İŞLEMLERİ
+        // ==========================================
+
         // SEPET: Ürün bilgilerini tek bir metin (string) haline getirip hafızaya yazan basit metot
         [HttpPost]
         public IActionResult SepeteEkle(int urunId, string secilenBeden)
@@ -348,6 +552,18 @@ namespace SevalKocaApp.Controllers
             // İşlem bitince kullanıcının az önce bulunduğu sayfayı tazele (Refresh efekti)
             return Redirect(Request.Headers["Referer"].ToString());
         }
+
+        // ==========================================
+        //  SATIN ALMA SAYFASI (SADECE UI — VERİTABANI KAYDI YOK)
+        // ==========================================
+
+        // SATIN AL: Sepet özetini gösterip teslimat formu sunan Checkout sayfası
+        public IActionResult SatinAl()
+        {
+            // Session'daki sepet verisini View'a taşımak için ViewBag kullanıyoruz
+            string sepetMetni = HttpContext.Session.GetString("Sepetim") ?? "";
+            ViewBag.SepetMetni = sepetMetni;
+            return View();
+        }
     }
 }
-

@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -20,9 +20,9 @@
         <div class="nav-left dropdown">
             <a href="#" class="dropbtn">Tüm Ürünler <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i></a>
             <div class="dropdown-content">
-                <a href="/Home/Kategori">Üst Giyim</a>
-                <a href="/Home/Kategori">Alt Giyim</a>
-                <a href="/Home/Kategori">Aksesuar</a>
+                <a href="/Home/Kategori?id=1">Üst Giyim</a>
+                <a href="/Home/Kategori?id=2">Alt Giyim</a>
+                <a href="/Home/Kategori?id=3">Aksesuar</a>
             </div>
         </div>
         <div class="logo">
@@ -30,21 +30,35 @@
         </div>
         <div class="nav-right">
             @if (Context.Session.GetString("GirisYapildi") == "Evet")
-{
-                    <a asp-controller="Home" asp-action="UrunYonetimi" style="margin-right: 15px; font-weight: bold; color: #000; text-decoration: none;">
+            {
+                @if (Context.Session.GetString("KullaniciRol") == "Admin")
+                {
+                    <a asp-controller="Home" asp-action="UrunYonetimi" style="margin-right: 10px; font-weight: bold; color: #000; text-decoration: none;">
                         <i class="fa-solid fa-user-gear"></i> Panel
-                    </a>
-                    <a asp-controller="Home" asp-action="Logout" style="color: #dc3545; font-weight: bold; text-decoration: none;">
-                        <i class="fa-solid fa-right-from-bracket"></i> Çıkış
                     </a>
                 }
                 else
                 {
-                    <a asp-controller="Home" asp-action="Login" style="font-weight: 500; color: #333; text-decoration: none;">
-                        <i class="fa-solid fa-user"></i> Giriş Yap
-                    </a>
+                    <span style="font-weight: 400; color: #555; font-size: 14px;">
+                        <i class="fa-solid fa-user"></i> Hoş Geldin, @Context.Session.GetString("KullaniciAd")
+                    </span>
                 }
-            <a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+                <a asp-controller="Home" asp-action="Logout" style="color: #dc3545; font-weight: bold; text-decoration: none;">
+                    <i class="fa-solid fa-right-from-bracket"></i> Çıkış
+                </a>
+            }
+            else
+            {
+                <a asp-controller="Home" asp-action="Login" style="font-weight: 500; color: #333; text-decoration: none;">
+                    <i class="fa-solid fa-user"></i> Giriş Yap
+                </a>
+            }
+
+            <!-- ARAMA: Tıklanınca açılan arama kutusu -->
+            <a href="javascript:void(0);" onclick="aramaKutusuAc()" title="Ara">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </a>
+
                 @{
                     // Hafızadaki metni al, eğer boş değilse yıldızlardan böl ve kaç parça olduğuna bak
                     string anlikSepet = Context.Session.GetString("Sepetim") ?? "";
@@ -56,11 +70,85 @@
         </div>
     </header>
 
+    <!-- ARAMA ÇUBUĞU (Varsayılan gizli, ikon tıklanınca açılır) -->
+    <div id="aramaBarı" style="display: none; background: #f9f9f9; padding: 15px 40px; border-bottom: 1px solid #eee; transition: all 0.3s ease;">
+        <form action="/Home/Ara" method="get" style="display: flex; align-items: center; max-width: 600px; margin: 0 auto; gap: 10px;">
+            <input type="text" name="q" placeholder="Ürün ara..." required
+                   style="flex: 1; padding: 12px 16px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; font-family: 'Jost', sans-serif; outline: none;" />
+            <button type="submit"
+                    style="padding: 12px 24px; background: #000; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-family: 'Jost', sans-serif; font-weight: 500; letter-spacing: 0.5px; transition: background 0.3s;">
+                <i class="fa-solid fa-magnifying-glass"></i> Ara
+            </button>
+            <button type="button" onclick="aramaKutusuKapat()"
+                    style="padding: 12px; background: none; border: none; cursor: pointer; font-size: 1.2rem; color: #999;">&times;</button>
+        </form>
+    </div>
+
     <main>
         @RenderBody()
     </main>
 
+    <!-- ==========================================
+         ZENGİN FOOTER
+         ========================================== -->
     <footer class="site-footer">
+        <div class="footer-grid">
+            <!-- Sütun 1: Kategoriler -->
+            <div class="footer-col">
+                <h3>Kategoriler</h3>
+                <ul>
+                    <li><a href="/Home/Kategori?id=1">Üst Giyim</a></li>
+                    <li><a href="/Home/Kategori?id=2">Alt Giyim</a></li>
+                    <li><a href="/Home/Kategori?id=3">Aksesuar</a></li>
+                    <li><a href="/Home/Kategori">Tüm Ürünler</a></li>
+                </ul>
+            </div>
+            <!-- Sütun 2: İade & Kargo -->
+            <div class="footer-col">
+                <h3>İade & Kargo</h3>
+                <ul>
+                    <li><a href="#">İade Koşulları</a></li>
+                    <li><a href="#">Kargo Takibi</a></li>
+                    <li><a href="#">Değişim Politikası</a></li>
+                    <li><a href="#">Teslimat Bilgileri</a></li>
+                </ul>
+            </div>
+            <!-- Sütun 3: Hakkımızda -->
+            <div class="footer-col">
+                <h3>Hakkımızda</h3>
+                <ul>
+                    <li><a href="#">Hikayemiz</a></li>
+                    <li><a href="#">Vizyonumuz</a></li>
+                    <li><a href="#">Kariyer</a></li>
+                    <li><a href="#">Basında Biz</a></li>
+                </ul>
+            </div>
+            <!-- Sütun 4: Sayfalar -->
+            <div class="footer-col">
+                <h3>Sayfalar</h3>
+                <ul>
+                    <li><a href="#">Gizlilik Politikası</a></li>
+                    <li><a href="#">Kullanım Koşulları</a></li>
+                    <li><a href="#">Çerez Politikası</a></li>
+                    <li><a href="#">KVKK Aydınlatma</a></li>
+                </ul>
+            </div>
+            <!-- Sütun 5: İletişim -->
+            <div class="footer-col">
+                <h3>İletişim</h3>
+                <ul>
+                    <li><i class="fa-solid fa-location-dot" style="margin-right: 6px;"></i> İstanbul, Türkiye</li>
+                    <li><i class="fa-solid fa-phone" style="margin-right: 6px;"></i> +90 555 123 4567</li>
+                    <li><i class="fa-solid fa-envelope" style="margin-right: 6px;"></i> info@sevalkoca.com</li>
+                </ul>
+                <div class="footer-social">
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-pinterest"></i></a>
+                </div>
+            </div>
+        </div>
         <div class="footer-bottom">
             <span>Şartlar ve Koşullar | Gizlilik Politikası | Erişilebilirlik</span>
             <span>© 2025 Tüm Hakları Saklıdır. Created by Yüksek Yazılım</span>
@@ -69,7 +157,7 @@
 
     <script src="~/js/app.js"></script>
 
-    <!-- sepet ekleme -->
+    <!-- sepet paneli -->
    <div id="sepetPaneli" style="position: fixed; top: 0; right: -400px; width: 350px; height: 100vh; background: #fff; box-shadow: -5px 0 25px rgba(0,0,0,0.05); padding: 30px 20px; transition: right 0.4s ease; z-index: 9999; display: flex; flex-direction: column; font-family: 'Jost', sans-serif; box-sizing: border-box;">
     
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eaeaea; padding-bottom: 15px; margin-bottom: 20px;">
@@ -116,7 +204,8 @@
             <span>₺@toplamFiyat</span>
         </div>
 
-        <button onmouseover="this.style.background='#d4af37'" onmouseout="this.style.background='#000'" style="width: 100%; padding: 14px; background: #000; color: #fff; border: none; cursor: pointer; font-weight: 500; letter-spacing: 1px; transition: 0.3s; margin-bottom: 10px;">
+        <!-- SEPETİ ONAYLA butonu artık Checkout sayfasına yönlendiriyor -->
+        <button onclick="window.location.href='/Home/SatinAl'" onmouseover="this.style.background='#d4af37'" onmouseout="this.style.background='#000'" style="width: 100%; padding: 14px; background: #000; color: #fff; border: none; cursor: pointer; font-weight: 500; letter-spacing: 1px; transition: 0.3s; margin-bottom: 10px;">
             SEPETİ ONAYLA
         </button>
 
@@ -128,6 +217,16 @@
 
 <script>
     function sepetiAc() { document.getElementById("sepetPaneli").style.right = "0"; }
+
+    // Arama kutusu aç/kapat fonksiyonları
+    function aramaKutusuAc() {
+        var bar = document.getElementById("aramaBarı");
+        bar.style.display = "block";
+        bar.querySelector("input").focus();
+    }
+    function aramaKutusuKapat() {
+        document.getElementById("aramaBarı").style.display = "none";
+    }
 </script>
 </body>
 </html>

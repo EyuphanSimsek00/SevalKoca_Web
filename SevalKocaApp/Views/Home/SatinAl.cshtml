@@ -1,0 +1,161 @@
+@{
+    ViewData["Title"] = "Satın Al";
+
+    // Session'dan sepet verisini parse et
+    string sepetMetni = ViewBag.SepetMetni ?? "";
+    string[] sepetUrunler = sepetMetni.ToString().Split('*', StringSplitOptions.RemoveEmptyEntries);
+    decimal toplam = 0;
+}
+
+<div class="checkout-container" style="max-width: 1100px; margin: 40px auto; padding: 20px 30px; font-family: 'Jost', sans-serif;">
+
+    <!-- Sayfa Başlığı -->
+    <h1 style="font-family: 'Cinzel', serif; text-align: center; margin-bottom: 40px; letter-spacing: 2px; font-size: 1.8rem;">SİPARİŞ TAMAMLA</h1>
+
+    @if (sepetUrunler.Length == 0)
+    {
+        <div style="text-align: center; padding: 80px 0;">
+            <i class="fa-solid fa-cart-shopping" style="font-size: 3rem; color: #ddd; margin-bottom: 20px; display: block;"></i>
+            <p style="color: #888; font-size: 1.1rem; margin-bottom: 15px;">Sepetiniz boş, sipariş verebilmek için ürün eklemelisiniz.</p>
+            <a href="/" style="display: inline-block; padding: 12px 30px; background: #000; color: #fff; text-decoration: none; border-radius: 4px; font-weight: 500;">
+                Alışverişe Başla
+            </a>
+        </div>
+    }
+    else
+    {
+        <div style="display: flex; gap: 40px; align-items: flex-start;">
+
+            <!-- SOL TARAF: TESLİMAT BİLGİLERİ FORMU -->
+            <div style="flex: 1.2; background: #fff; border: 1px solid #eee; border-radius: 8px; padding: 30px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);">
+                
+                <h2 style="font-family: 'Cinzel', serif; margin-bottom: 25px; font-size: 1.2rem; letter-spacing: 1px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+                    <i class="fa-solid fa-truck" style="margin-right: 8px;"></i> TESLİMAT BİLGİLERİ
+                </h2>
+
+                <form style="display: flex; flex-direction: column; gap: 18px;">
+                    <div style="display: flex; gap: 12px;">
+                        <div style="flex: 1;">
+                            <label style="display: block; margin-bottom: 6px; font-weight: 500; font-size: 0.9rem; color: #555;">Ad</label>
+                            <input type="text" placeholder="Adınız" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95rem; box-sizing: border-box;" />
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="display: block; margin-bottom: 6px; font-weight: 500; font-size: 0.9rem; color: #555;">Soyad</label>
+                            <input type="text" placeholder="Soyadınız" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95rem; box-sizing: border-box;" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label style="display: block; margin-bottom: 6px; font-weight: 500; font-size: 0.9rem; color: #555;">E-posta</label>
+                        <input type="email" placeholder="ornek@email.com" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95rem; box-sizing: border-box;" />
+                    </div>
+
+                    <div>
+                        <label style="display: block; margin-bottom: 6px; font-weight: 500; font-size: 0.9rem; color: #555;">Telefon</label>
+                        <input type="tel" placeholder="05XX XXX XX XX" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95rem; box-sizing: border-box;" />
+                    </div>
+
+                    <div>
+                        <label style="display: block; margin-bottom: 6px; font-weight: 500; font-size: 0.9rem; color: #555;">Adres</label>
+                        <textarea rows="3" placeholder="Teslimat adresiniz" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95rem; box-sizing: border-box; resize: vertical; font-family: 'Jost', sans-serif;"></textarea>
+                    </div>
+
+                    <div style="display: flex; gap: 12px;">
+                        <div style="flex: 1;">
+                            <label style="display: block; margin-bottom: 6px; font-weight: 500; font-size: 0.9rem; color: #555;">İl</label>
+                            <input type="text" placeholder="Şehir" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95rem; box-sizing: border-box;" />
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="display: block; margin-bottom: 6px; font-weight: 500; font-size: 0.9rem; color: #555;">İlçe</label>
+                            <input type="text" placeholder="İlçe" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95rem; box-sizing: border-box;" />
+                        </div>
+                    </div>
+
+                    <!-- Ödeme Bilgileri Bölümü -->
+                    <h2 style="font-family: 'Cinzel', serif; margin-top: 15px; margin-bottom: 5px; font-size: 1.2rem; letter-spacing: 1px; border-top: 1px solid #eee; padding-top: 25px;">
+                        <i class="fa-solid fa-credit-card" style="margin-right: 8px;"></i> ÖDEME BİLGİLERİ
+                    </h2>
+
+                    <div>
+                        <label style="display: block; margin-bottom: 6px; font-weight: 500; font-size: 0.9rem; color: #555;">Kart Üzerindeki İsim</label>
+                        <input type="text" placeholder="Ad Soyad" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95rem; box-sizing: border-box;" />
+                    </div>
+
+                    <div>
+                        <label style="display: block; margin-bottom: 6px; font-weight: 500; font-size: 0.9rem; color: #555;">Kart Numarası</label>
+                        <input type="text" placeholder="XXXX XXXX XXXX XXXX" maxlength="19" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95rem; box-sizing: border-box; letter-spacing: 2px;" />
+                    </div>
+
+                    <div style="display: flex; gap: 12px;">
+                        <div style="flex: 1;">
+                            <label style="display: block; margin-bottom: 6px; font-weight: 500; font-size: 0.9rem; color: #555;">Son Kullanma Tarihi</label>
+                            <input type="text" placeholder="AA/YY" maxlength="5" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95rem; box-sizing: border-box;" />
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="display: block; margin-bottom: 6px; font-weight: 500; font-size: 0.9rem; color: #555;">CVV</label>
+                            <input type="text" placeholder="XXX" maxlength="3" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95rem; box-sizing: border-box;" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- SAĞ TARAF: SEPET ÖZETİ -->
+            <div style="flex: 0.8; background: #fafafa; border: 1px solid #eee; border-radius: 8px; padding: 30px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); position: sticky; top: 30px;">
+                
+                <h2 style="font-family: 'Cinzel', serif; margin-bottom: 25px; font-size: 1.2rem; letter-spacing: 1px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+                    <i class="fa-solid fa-bag-shopping" style="margin-right: 8px;"></i> SEPET ÖZETİ
+                </h2>
+
+                @for (int i = 0; i < sepetUrunler.Length; i++)
+                {
+                    var detay = sepetUrunler[i].Split('|');
+                    decimal urunFiyat = Convert.ToDecimal(detay[1]);
+                    toplam += urunFiyat;
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee;">
+                        <div>
+                            <p style="margin: 0; font-weight: 500; color: #000; font-size: 0.95rem;">@detay[0]</p>
+                            <p style="margin: 3px 0 0; color: #888; font-size: 0.8rem;">Beden: @detay[3]</p>
+                        </div>
+                        <span style="font-weight: 500; color: #000;">₺@detay[1]</span>
+                    </div>
+                }
+
+                <!-- Toplam Bilgileri -->
+                <div style="margin-top: 20px; padding-top: 15px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px; color: #666; font-size: 0.95rem;">
+                        <span>Ara Toplam</span>
+                        <span>₺@toplam</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px; color: #666; font-size: 0.95rem;">
+                        <span>Kargo</span>
+                        @if (toplam >= 2500)
+                        {
+                            <span style="color: #28a745; font-weight: 500;">Ücretsiz</span>
+                        }
+                        else
+                        {
+                            <span>₺49.90</span>
+                            toplam += 49.90m;
+                        }
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 1.2rem; color: #000; border-top: 2px solid #000; padding-top: 15px; margin-top: 15px;">
+                        <span>TOPLAM</span>
+                        <span>₺@toplam</span>
+                    </div>
+                </div>
+
+                <!-- Sipariş Tamamla Butonu -->
+                <button onclick="alert('Siparişiniz başarıyla alınmıştır! 🎉\nTeşekkür ederiz.')"
+                        style="width: 100%; padding: 16px; background: #000; color: #fff; border: none; cursor: pointer; font-weight: 600; letter-spacing: 1.5px; font-size: 1rem; margin-top: 25px; border-radius: 4px; transition: background 0.3s;"
+                        onmouseover="this.style.background='#d4af37'" onmouseout="this.style.background='#000'">
+                    SİPARİŞİ TAMAMLA
+                </button>
+
+                <p style="text-align: center; margin-top: 15px; color: #aaa; font-size: 0.8rem;">
+                    <i class="fa-solid fa-lock" style="margin-right: 4px;"></i> Ödeme bilgileriniz güvende
+                </p>
+            </div>
+        </div>
+    }
+</div>

@@ -1,4 +1,4 @@
-﻿@model List<SevalKocaApp.Models.Urun>
+@model List<SevalKocaApp.Models.Urun>
 @{
     ViewData["Title"] = "Ana Sayfa";
 }
@@ -12,18 +12,18 @@
 <section class="categories-section">
     <h2 class="section-title"><u>Kategoriler</u></h2>
     <div class="category-grid">
-        <div class="category-card">
+        <a href="/Home/Kategori?id=1" class="category-card">
             <img src="~/assets/ceket.jpg" alt="Üst Giyim">
             <span class="category-label">Üst Giyim</span>
-        </div>
-        <div class="category-card">
+        </a>
+        <a href="/Home/Kategori?id=2" class="category-card">
             <img src="~/assets/Kahverengi-Tayt.jpg" alt="Alt Giyim">
             <span class="category-label">Alt Giyim</span>
-        </div>
-        <div class="category-card">
+        </a>
+        <a href="/Home/Kategori?id=3" class="category-card">
             <img src="~/assets/aksesuar.jpg" alt="Aksesuar">
             <span class="category-label">Aksesuar</span>
-        </div>
+        </a>
     </div>
 </section>
 

@@ -8,7 +8,7 @@
     
     <!-- Yön Bulma (Breadcrumb) Çubuğu -->
     <div class="breadcrumb">
-         <a href="~/">Ana Sayfa</a> / <a href="~/Home/Kategori">Üst Giyim</a> / <span>@Model.UrunAdi</span>
+         <a href="~/">Ana Sayfa</a> / <a href="~/Home/Kategori">Ürünler</a> / <span>@Model.UrunAdi</span>
     </div>
 
           <div class="product-gallery">
@@ -27,9 +27,17 @@
               <h1 class="product-title">@Model.UrunAdi</h1>
               <p class="product-price">₺@Model.Fiyat</p>
               
+              <!-- Dinamik Açıklama: Veritabanındaki Aciklama sütunundan geliyor -->
               <div class="product-description">
-     Özel krokodil dokulu, yüksek kaliteli suni deriden üretilmiş, kısa kesim iddialı tasarım ceket. Hem gündüz şıklığına hem de gece davetlerine mükemmel uyum sağlar.
-</div>
+                  @if (!string.IsNullOrEmpty(Model.Aciklama))
+                  {
+                      @Model.Aciklama
+                  }
+                  else
+                  {
+                      <span style="color: #999;">Bu ürün için henüz bir açıklama eklenmemiştir.</span>
+                  }
+              </div>
 
 <form asp-controller="Home" asp-action="SepeteEkle" method="post">
     
@@ -39,10 +47,10 @@
 
     <div class="size-selector" style="margin: 20px 0;">
          <span>Beden Seçin:</span>
-         <button type="button" class="size-btn" onclick="document.getElementById('gizliBeden').value = '34'">34</button>
-         <button type="button" class="size-btn" onclick="document.getElementById('gizliBeden').value = '36'">36</button>
-         <button type="button" class="size-btn" onclick="document.getElementById('gizliBeden').value = '38'">38</button>
-         <button type="button" class="size-btn" onclick="document.getElementById('gizliBeden').value = '40'">40</button>
+         <button type="button" class="size-btn" onclick="bedenSec(this, '34')">34</button>
+         <button type="button" class="size-btn" onclick="bedenSec(this, '36')">36</button>
+         <button type="button" class="size-btn" onclick="bedenSec(this, '38')">38</button>
+         <button type="button" class="size-btn" onclick="bedenSec(this, '40')">40</button>
     </div>
 
     <button type="submit" class="btn-add-to-cart">SEPETE EKLE</button>
@@ -58,3 +66,18 @@
          <p>Siparişleriniz 1-3 iş günü içerisinde kargoya teslim edilmektedir. Etiketi koparılmamış ve kullanılmamış ürünleri 14 gün içerisinde ücretsiz iade edebilirsiniz.</p>
      </details>
 </div>
+
+<script>
+    // Beden butonlarına tıklanınca seçili beden stilini güncelle
+    function bedenSec(btn, beden) {
+        document.getElementById('gizliBeden').value = beden;
+        // Tüm butonlardan seçili sınıfı kaldır
+        document.querySelectorAll('.size-btn').forEach(function(b) {
+            b.style.borderColor = '#ddd';
+            b.style.backgroundColor = 'transparent';
+        });
+        // Tıklanan butonu seçili yap
+        btn.style.borderColor = '#000';
+        btn.style.backgroundColor = '#f0f0f0';
+    }
+</script>

@@ -1,33 +1,136 @@
 @{
-    ViewData["Title"] = "Yönetici Girişi";
+    ViewData["Title"] = "Giriş Yap / Kayıt Ol";
+    // Hangi sekmenin açık olacağını belirle (varsayılan: giriş)
+    string aktifSekme = ViewBag.AktifSekme ?? "giris";
 }
 
-<div class="login-container" style="max-width: 400px; margin: 100px auto; padding: 40px; border: 1px solid #eee; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); font-family: sans-serif;">
+<div class="login-container" style="max-width: 460px; margin: 60px auto; padding: 40px; border: 1px solid #eee; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); font-family: 'Jost', sans-serif;">
     
-    <h2 style="font-family: 'Cinzel', serif; text-align: center; margin-bottom: 30px; letter-spacing: 2px; font-size: 1.6rem;">YÖNETİCİ GİRİŞİ</h2>
+    <!-- Sekme Başlıkları -->
+    <div style="display: flex; margin-bottom: 30px; border-bottom: 2px solid #eee;">
+        <button id="girisTab" onclick="sekmeGoster('giris')" 
+                style="flex: 1; padding: 14px; background: none; border: none; font-family: 'Cinzel', serif; font-size: 1.1rem; letter-spacing: 1px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.3s; color: #999;">
+            GİRİŞ YAP
+        </button>
+        <button id="kayitTab" onclick="sekmeGoster('kayit')" 
+                style="flex: 1; padding: 14px; background: none; border: none; font-family: 'Cinzel', serif; font-size: 1.1rem; letter-spacing: 1px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.3s; color: #999;">
+            KAYIT OL
+        </button>
+    </div>
 
-    @if (ViewBag.HataMesaji != null)
+    <!-- Başarı Mesajı -->
+    @if (ViewBag.BasariMesaji != null)
     {
-        <div style="background-color: #f8d7da; color: #721c24; padding: 12px; border-radius: 4px; margin-bottom: 20px; text-align: center; font-size: 0.9rem;">
-            @ViewBag.HataMesaji
+        <div style="background-color: #d4edda; color: #155724; padding: 12px; border-radius: 4px; margin-bottom: 20px; text-align: center; font-size: 0.9rem;">
+            @ViewBag.BasariMesaji
         </div>
     }
 
-    <form asp-action="Login" method="post" style="display: flex; flex-direction: column; gap: 20px;">
-        
-        <div class="form-group">
-            <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">Kullanıcı Adı</label>
-            <input name="username" type="text" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; box-sizing: border-box;" placeholder="admin" />
-        </div>
+    <!-- ==========================================
+         GİRİŞ YAP FORMU
+         ========================================== -->
+    <div id="girisFormu">
+        @if (ViewBag.HataMesaji != null)
+        {
+            <div style="background-color: #f8d7da; color: #721c24; padding: 12px; border-radius: 4px; margin-bottom: 20px; text-align: center; font-size: 0.9rem;">
+                @ViewBag.HataMesaji
+            </div>
+        }
 
-        <div class="form-group">
-            <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">Şifre</label>
-            <input name="password" type="password" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; box-sizing: border-box;" placeholder="••••" />
-        </div>
+        <form asp-action="Login" method="post" style="display: flex; flex-direction: column; gap: 20px;">
+            
+            <div class="form-group">
+                <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">E-posta Adresi</label>
+                <input name="email" type="email" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; box-sizing: border-box;" placeholder="ornek@email.com" />
+            </div>
 
-        <button type="submit" style="width: 100%; padding: 14px; background-color: #000; color: #fff; border: none; border-radius: 4px; font-size: 1rem; cursor: pointer; transition: background 0.3s; font-weight: bold; letter-spacing: 1px; margin-top: 10px;">
-            SİSTEME GİRİŞ YAP
-        </button>
+            <div class="form-group">
+                <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">Şifre</label>
+                <input name="sifre" type="password" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; box-sizing: border-box;" placeholder="••••••" />
+            </div>
 
-    </form>
+            <button type="submit" style="width: 100%; padding: 14px; background-color: #000; color: #fff; border: none; border-radius: 4px; font-size: 1rem; cursor: pointer; transition: background 0.3s; font-weight: bold; letter-spacing: 1px; margin-top: 10px;">
+                GİRİŞ YAP
+            </button>
+        </form>
+
+        <p style="text-align: center; margin-top: 20px; color: #888; font-size: 0.9rem;">
+            Hesabınız yok mu? <a href="javascript:void(0);" onclick="sekmeGoster('kayit')" style="color: #000; font-weight: 500; text-decoration: underline;">Kayıt Ol</a>
+        </p>
+    </div>
+
+    <!-- ==========================================
+         KAYIT OL FORMU
+         ========================================== -->
+    <div id="kayitFormu" style="display: none;">
+        @if (ViewBag.KayitHata != null)
+        {
+            <div style="background-color: #f8d7da; color: #721c24; padding: 12px; border-radius: 4px; margin-bottom: 20px; text-align: center; font-size: 0.9rem;">
+                @ViewBag.KayitHata
+            </div>
+        }
+
+        <form asp-action="KayitOl" method="post" style="display: flex; flex-direction: column; gap: 18px;">
+            
+            <div style="display: flex; gap: 12px;">
+                <div class="form-group" style="flex: 1;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">Ad</label>
+                    <input name="ad" type="text" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; box-sizing: border-box;" placeholder="Adınız" />
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">Soyad</label>
+                    <input name="soyad" type="text" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; box-sizing: border-box;" placeholder="Soyadınız" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">E-posta Adresi</label>
+                <input name="email" type="email" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; box-sizing: border-box;" placeholder="ornek@email.com" />
+            </div>
+
+            <div class="form-group">
+                <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">Şifre</label>
+                <input name="sifre" type="password" required minlength="4" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; box-sizing: border-box;" placeholder="En az 4 karakter" />
+            </div>
+
+            <button type="submit" style="width: 100%; padding: 14px; background-color: #000; color: #fff; border: none; border-radius: 4px; font-size: 1rem; cursor: pointer; transition: background 0.3s; font-weight: bold; letter-spacing: 1px; margin-top: 10px;">
+                KAYIT OL
+            </button>
+        </form>
+
+        <p style="text-align: center; margin-top: 20px; color: #888; font-size: 0.9rem;">
+            Zaten hesabınız var mı? <a href="javascript:void(0);" onclick="sekmeGoster('giris')" style="color: #000; font-weight: 500; text-decoration: underline;">Giriş Yap</a>
+        </p>
+    </div>
 </div>
+
+<script>
+    // Sekme geçiş fonksiyonu
+    function sekmeGoster(sekme) {
+        var girisFormu = document.getElementById('girisFormu');
+        var kayitFormu = document.getElementById('kayitFormu');
+        var girisTab = document.getElementById('girisTab');
+        var kayitTab = document.getElementById('kayitTab');
+
+        if (sekme === 'giris') {
+            girisFormu.style.display = 'block';
+            kayitFormu.style.display = 'none';
+            girisTab.style.borderBottomColor = '#000';
+            girisTab.style.color = '#000';
+            kayitTab.style.borderBottomColor = 'transparent';
+            kayitTab.style.color = '#999';
+        } else {
+            girisFormu.style.display = 'none';
+            kayitFormu.style.display = 'block';
+            kayitTab.style.borderBottomColor = '#000';
+            kayitTab.style.color = '#000';
+            girisTab.style.borderBottomColor = 'transparent';
+            girisTab.style.color = '#999';
+        }
+    }
+
+    // Sayfa yüklendiğinde doğru sekmeyi göster
+    document.addEventListener('DOMContentLoaded', function() {
+        sekmeGoster('@aktifSekme');
+    });
+</script>
