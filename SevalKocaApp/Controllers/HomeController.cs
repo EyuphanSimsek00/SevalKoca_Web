@@ -472,6 +472,18 @@ namespace SevalKocaApp.Controllers
         // LOGIN: Giriş Sayfasını Açan Metot (GET)
         public IActionResult Login()
         {
+            // Matematiksel CAPTCHA: 1-10 arası iki rastgele sayı üret
+            Random rnd = new Random();
+            int sayi1 = rnd.Next(1, 11);
+            int sayi2 = rnd.Next(1, 11);
+            int toplam = sayi1 + sayi2;
+
+            // Doğru cevabı güvenli Session'a kaydet (kullanıcı göremez)
+            HttpContext.Session.SetInt32("CaptchaCevap", toplam);
+
+            // Görüntenenecek soruyu ViewBag ile View'a ilet
+            ViewBag.CaptchaSorusu = $"{sayi1} + {sayi2} kaçtır?";
+
             return View();
         }
 
@@ -519,8 +531,27 @@ namespace SevalKocaApp.Controllers
 
         // KAYIT OL: Yeni Kullanıcı Kaydı (POST)
         [HttpPost]
-        public IActionResult KayitOl(string ad, string soyad, string email, string sifre)
+        public IActionResult KayitOl(string ad, string soyad, string email, string sifre, int KullaniciCaptchaCevabi)
         {
+            // ==========================================
+            //  CAPTCHA DOGRULAMASI (ilk şey bu!)
+            // ==========================================
+            int? dogruCevap = HttpContext.Session.GetInt32("CaptchaCevap");
+            if (dogruCevap == null || KullaniciCaptchaCevabi != dogruCevap.Value)
+            {
+                ViewBag.KayitHata = "Güvenlik sorusunu yanlış cevapladınız! Lütfen tekrar deneyin.";
+                ViewBag.AktifSekme = "kayit";
+
+                // Yeni bir CAPTCHA sorusu üret ve tekrar sayfaya gönder
+                Random rnd = new Random();
+                int sayi1 = rnd.Next(1, 11);
+                int sayi2 = rnd.Next(1, 11);
+                HttpContext.Session.SetInt32("CaptchaCevap", sayi1 + sayi2);
+                ViewBag.CaptchaSorusu = $"{sayi1} + {sayi2} kaçtır?";
+
+                return View("Login");
+            }
+
             // Basit doğrulama
             if (string.IsNullOrWhiteSpace(ad) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(sifre))
             {
